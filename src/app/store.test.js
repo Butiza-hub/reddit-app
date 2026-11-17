@@ -9,4 +9,11 @@ describe('store', () => {
       error: null,
     })
   })
+
+  it('has a filters section that starts with no search and all categories', () => {
+    expect(store.getState().filters).toEqual({
+      searchTerm: '',
+      category: 'all',
+    })
+  })
 })
