@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadPosts } from './postsSlice'
+import PostCard from './PostCard'
 
 export default function PostList() {
   const dispatch = useDispatch()
@@ -18,11 +19,7 @@ export default function PostList() {
     <ul>
       {items.map((post) => (
         <li key={post.id}>
-          <h2>{post.title}</h2>
-          <p>
-            r/{post.subreddit} by {post.author} · {post.score} points ·{' '}
-            {post.numComments} comments
-          </p>
+          <PostCard post={post} />
         </li>
       ))}
     </ul>
