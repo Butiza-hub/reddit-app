@@ -3,18 +3,21 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
+import { MemoryRouter } from 'react-router-dom'
 import postsReducer from './features/posts/postsSlice'
 import filtersReducer from './features/filters/filtersSlice'
 import { fetchPosts } from './api/redditApi'
 import App from './App'
 
-function renderApp() {
+function renderApp(route = '/') {
   const store = configureStore({
     reducer: { posts: postsReducer, filters: filtersReducer },
   })
   return render(
     <Provider store={store}>
-      <App />
+      <MemoryRouter initialEntries={[route]}>
+        <App />
+      </MemoryRouter>
     </Provider>,
   )
 }
@@ -80,5 +83,23 @@ describe('App', () => {
 
     expect(screen.getByLabelText(/search posts/i)).toHaveValue('')
     expect(screen.getAllByRole('article').length).toBeGreaterThan(1)
+  })
+
+  it('shows a back link and no search box on a post page', () => {
+    renderApp('/post/p1')
+
+    expect(
+      screen.getByRole('link', { name: /back to feed/i }),
+    ).toHaveAttribute('href', '/')
+    expect(screen.queryByLabelText(/search posts/i)).not.toBeInTheDocument()
+  })
+
+  it('goes back to the feed when the back link is clicked', async () => {
+    const user = userEvent.setup()
+    renderApp('/post/p1')
+
+    await user.click(screen.getByRole('link', { name: /back to feed/i }))
+
+    expect(await screen.findByLabelText(/search posts/i)).toBeInTheDocument()
   })
 })

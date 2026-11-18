@@ -1,10 +1,11 @@
+import { Link, Route, Routes } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import SearchBox from './components/SearchBox'
 import CategoryBar from './components/CategoryBar'
 import PostList from './features/posts/PostList'
 import { setCategory, setSearchTerm } from './features/filters/filtersSlice'
 
-export default function App() {
+function Feed() {
   const dispatch = useDispatch()
   const { searchTerm, category } = useSelector((state) => state.filters)
 
@@ -25,5 +26,22 @@ export default function App() {
         <PostList />
       </main>
     </>
+  )
+}
+
+function PostPage() {
+  return (
+    <main>
+      <Link to="/">Back to feed</Link>
+    </main>
+  )
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Feed />} />
+      <Route path="/post/:id" element={<PostPage />} />
+    </Routes>
   )
 }
