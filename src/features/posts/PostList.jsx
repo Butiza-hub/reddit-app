@@ -19,6 +19,22 @@ export default function PostList() {
     dispatch(setCategory('all'))
   }
 
+  function handleTryAgain() {
+    dispatch(loadPosts())
+  }
+
+  if (status === 'failed') {
+    return (
+      <div>
+        <h2>Something went wrong</h2>
+        <p>We couldn&rsquo;t load the posts. Please try again.</p>
+        <button type="button" onClick={handleTryAgain}>
+          Try again
+        </button>
+      </div>
+    )
+  }
+
   if (status !== 'succeeded') {
     return <p>Loading posts...</p>
   }

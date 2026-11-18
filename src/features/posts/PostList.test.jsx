@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'react-redux'
@@ -10,6 +10,11 @@ import filtersReducer, {
 } from '../filters/filtersSlice'
 import PostList from './PostList'
 import { fetchPosts } from '../../api/redditApi'
+
+vi.mock('../../api/redditApi', async (importOriginal) => {
+  const actual = await importOriginal()
+  return { ...actual, fetchPosts: vi.fn(actual.fetchPosts) }
+})
 
 function renderWithStore(...actions) {
   const store = configureStore({
@@ -91,5 +96,29 @@ describe('PostList', () => {
     const posts = await fetchPosts()
 
     expect(cards).toHaveLength(posts.length)
+  })
+
+  it('shows an error with a "Try again" button when loading fails', async () => {
+    fetchPosts.mockRejectedValueOnce(new Error('Network down'))
+    renderWithStore()
+
+    expect(await screen.findByText(/something went wrong/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /try again/i })).toBeInTheDocument()
+    expect(screen.queryByText(/loading posts/i)).not.toBeInTheDocument()
+    expect(screen.queryByRole('article')).not.toBeInTheDocument()
+  })
+
+  it('loads the posts again when "Try again" is clicked', async () => {
+    const user = userEvent.setup()
+    fetchPosts.mockRejectedValueOnce(new Error('Network down'))
+    renderWithStore()
+
+    await user.click(await screen.findByRole('button', { name: /try again/i }))
+
+    const cards = await screen.findAllByRole('article')
+    const posts = await fetchPosts()
+
+    expect(cards).toHaveLength(posts.length)
+    expect(screen.queryByText(/something went wrong/i)).not.toBeInTheDocument()
   })
 })
