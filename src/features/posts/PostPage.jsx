@@ -14,13 +14,19 @@ export default function PostPage() {
     dispatch(loadPosts())
   }, [dispatch])
 
+  function handleTryAgain() {
+    dispatch(loadPosts())
+  }
+
   if (!post) {
     if (status === 'failed') {
       return (
         <div>
           <h1>Something went wrong</h1>
           <p>We couldn&rsquo;t load this post. Please try again.</p>
-          <button type="button">Try again</button>
+          <button type="button" onClick={handleTryAgain}>
+            Try again
+          </button>
         </div>
       )
     }
