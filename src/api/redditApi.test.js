@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { fetchPosts } from './redditApi'
+import { fetchPosts, fetchComments } from './redditApi'
 
 const categories = ['technology', 'programming', 'webdev', 'movies', 'sports']
 
@@ -38,4 +38,39 @@ describe('fetchPosts', () => {
       expect(subreddits).toContain(category)
     }
   })
-}) 
+})
+
+describe('fetchComments', () => {
+  it('resolves with a non-empty list of comments for a post', async () => {
+    const comments = await fetchComments('p1')
+
+    expect(Array.isArray(comments)).toBe(true)
+    expect(comments.length).toBeGreaterThan(0)
+  })
+
+  it('gives every comment the fields the detail page needs', async () => {
+    const comments = await fetchComments('p1')
+
+    for (const comment of comments) {
+      expect(comment).toEqual(
+        expect.objectContaining({
+          id: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String),
+          createdUtc: expect.any(Number),
+        }),
+      )
+    }
+  })
+
+  it('returns an empty list for a post with no comments', async () => {
+    expect(await fetchComments('missing-post')).toEqual([])
+  })
+
+  it('includes Markdown in at least one comment', async () => {
+    const comments = await fetchComments('p1')
+    const markdown = /\*\*[^*]+\*\*|^- |\[[^\]]+\]\([^)]+\)/m
+
+    expect(comments.some((comment) => markdown.test(comment.body))).toBe(true)
+  })
+})

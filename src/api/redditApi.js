@@ -1,6 +1,6 @@
-// Sample data in the shape the UI needs. All posts are invented.
-// Later we can swap fetchPosts for a real Reddit call without
-// touching the rest of the app.
+// Sample data in the shape the UI needs. All posts and comments
+// are invented. Later we can swap these functions for real Reddit
+// calls without touching the rest of the app.
 const now = Math.floor(Date.now() / 1000)
 const hoursAgo = (hours) => now - hours * 3600
 
@@ -79,6 +79,50 @@ const samplePosts = [
   },
 ]
 
+// Comment bodies are Markdown, like the ones Reddit sends.
+// Posts p3 to p6 have none on purpose, so we can build the
+// "no comments yet" case.
+const sampleComments = {
+  p1: [
+    {
+      id: 'c1',
+      author: 'techFan',
+      body: 'This is **huge** for mobile devices! Battery life is the one spec I always check.',
+      createdUtc: hoursAgo(5),
+    },
+    {
+      id: 'c2',
+      author: 'laptopUser',
+      body: 'Things I want to see in real tests:\n\n- video playback\n- gaming\n- standby drain',
+      createdUtc: hoursAgo(4),
+    },
+    {
+      id: 'c3',
+      author: 'benchWatcher',
+      body: 'Early numbers are promising. Here is the [original write-up](https://example.com/benchmarks).',
+      createdUtc: hoursAgo(3),
+    },
+  ],
+  p2: [
+    {
+      id: 'c4',
+      author: 'stackTracer',
+      body: 'A good **debugger** beats print statements every single time.',
+      createdUtc: hoursAgo(7),
+    },
+    {
+      id: 'c5',
+      author: 'gitGud',
+      body: 'Learning `git bisect` saved me a full day last month.',
+      createdUtc: hoursAgo(6),
+    },
+  ],
+}
+
 export function fetchPosts() {
   return Promise.resolve(samplePosts)
+}
+
+export function fetchComments(postId) {
+  return Promise.resolve(sampleComments[postId] ?? [])
 }
