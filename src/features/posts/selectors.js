@@ -16,3 +16,6 @@ export const selectVisiblePosts = createSelector(
     return filterPosts(inCategory, searchTerm)
   },
 )
+
+export const selectPostById = (state, id) =>
+  selectItems(state).find((post) => post.id === id)
