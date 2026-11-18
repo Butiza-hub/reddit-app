@@ -30,4 +30,14 @@ describe('PostPage', () => {
       }),
     ).toBeInTheDocument()
   })
+
+  it('shows the subreddit, author, excerpt, points and comment count', async () => {
+    renderPostPage('p1')
+
+    expect(await screen.findByText('r/technology')).toBeInTheDocument()
+    expect(screen.getByText('u/user123')).toBeInTheDocument()
+    expect(screen.getByText(/a hardware team shared early/i)).toBeInTheDocument()
+    expect(screen.getByText('245 points')).toBeInTheDocument()
+    expect(screen.getByText('38 comments')).toBeInTheDocument()
+  })
 })

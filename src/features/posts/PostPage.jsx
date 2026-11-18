@@ -17,5 +17,18 @@ export default function PostPage() {
     return null
   }
 
-  return <h1>{post.title}</h1>
+  return (
+    <article>
+      <p>
+        <span>{`r/${post.subreddit}`}</span>
+        <span>{`u/${post.author}`}</span>
+      </p>
+      <h1>{post.title}</h1>
+      <p>{post.excerpt}</p>
+      <p>
+        <span>{`${post.score} points`}</span>
+        <span>{`${post.numComments} comments`}</span>
+      </p>
+    </article>
+  )
 }
