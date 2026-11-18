@@ -55,4 +55,20 @@ describe('PostPage', () => {
     expect(await screen.findByText('Post not found')).toBeInTheDocument()
     expect(screen.queryByText('Loading post...')).not.toBeInTheDocument()
   })
+
+  it('keeps a back link to the feed while loading and once the post shows', async () => {
+    renderPostPage('p1')
+
+    expect(screen.getByRole('link', { name: /back to feed/i })).toHaveAttribute(
+      'href',
+      '/',
+    )
+
+    await screen.findByRole('heading', { level: 1 })
+
+    expect(screen.getByRole('link', { name: /back to feed/i })).toHaveAttribute(
+      'href',
+      '/',
+    )
+  })
 })
