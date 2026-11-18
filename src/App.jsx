@@ -1,8 +1,9 @@
-import { Link, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import SearchBox from './components/SearchBox'
 import CategoryBar from './components/CategoryBar'
 import PostList from './features/posts/PostList'
+import PostPage from './features/posts/PostPage'
 import { setCategory, setSearchTerm } from './features/filters/filtersSlice'
 
 function Feed() {
@@ -26,14 +27,6 @@ function Feed() {
         <PostList />
       </main>
     </>
-  )
-}
-
-function PostPage() {
-  return (
-    <main>
-      <Link to="/">Back to feed</Link>
-    </main>
   )
 }
 
