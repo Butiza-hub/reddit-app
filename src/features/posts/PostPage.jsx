@@ -7,6 +7,7 @@ import { selectPostById } from './selectors'
 export default function PostPage() {
   const { id } = useParams()
   const dispatch = useDispatch()
+  const status = useSelector((state) => state.posts.status)
   const post = useSelector((state) => selectPostById(state, id))
 
   useEffect(() => {
@@ -14,6 +15,9 @@ export default function PostPage() {
   }, [dispatch])
 
   if (!post) {
+    if (status === 'succeeded') {
+      return <p>Post not found</p>
+    }
     return <p>Loading post...</p>
   }
 

@@ -48,4 +48,11 @@ describe('PostPage', () => {
 
     await screen.findByRole('heading', { level: 1 })
   })
+
+  it('says the post was not found when the id does not exist', async () => {
+    renderPostPage('nope')
+
+    expect(await screen.findByText('Post not found')).toBeInTheDocument()
+    expect(screen.queryByText('Loading post...')).not.toBeInTheDocument()
+  })
 })
