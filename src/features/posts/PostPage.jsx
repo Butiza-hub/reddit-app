@@ -15,6 +15,15 @@ export default function PostPage() {
   }, [dispatch])
 
   if (!post) {
+    if (status === 'failed') {
+      return (
+        <div>
+          <h1>Something went wrong</h1>
+          <p>We couldn&rsquo;t load this post. Please try again.</p>
+          <button type="button">Try again</button>
+        </div>
+      )
+    }
     if (status === 'succeeded') {
       return <p>Post not found</p>
     }
