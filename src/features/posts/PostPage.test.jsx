@@ -40,4 +40,12 @@ describe('PostPage', () => {
     expect(screen.getByText('245 points')).toBeInTheDocument()
     expect(screen.getByText('38 comments')).toBeInTheDocument()
   })
+
+  it('shows a loading message until the posts have arrived', async () => {
+    renderPostPage('p1')
+
+    expect(screen.getByText('Loading post...')).toBeInTheDocument()
+
+    await screen.findByRole('heading', { level: 1 })
+  })
 })

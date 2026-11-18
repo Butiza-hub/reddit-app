@@ -14,7 +14,7 @@ export default function PostPage() {
   }, [dispatch])
 
   if (!post) {
-    return null
+    return <p>Loading post...</p>
   }
 
   return (
