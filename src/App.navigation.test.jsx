@@ -6,11 +6,16 @@ import { configureStore } from '@reduxjs/toolkit'
 import { MemoryRouter } from 'react-router-dom'
 import postsReducer from './features/posts/postsSlice'
 import filtersReducer from './features/filters/filtersSlice'
+import commentsReducer from './features/comments/commentsSlice'
 import App from './App'
 
 function renderApp() {
   const store = configureStore({
-    reducer: { posts: postsReducer, filters: filtersReducer },
+    reducer: {
+      posts: postsReducer,
+      filters: filtersReducer,
+      comments: commentsReducer,
+    },
   })
   return render(
     <Provider store={store}>

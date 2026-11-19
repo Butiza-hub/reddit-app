@@ -5,15 +5,19 @@ import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import postsReducer from './postsSlice'
+import commentsReducer from '../comments/commentsSlice'
 import PostPage from './PostPage'
 import { fetchPosts } from '../../api/redditApi'
 
 vi.mock('../../api/redditApi', () => ({
   fetchPosts: vi.fn(() => Promise.reject(new Error('Network down'))),
+  fetchComments: vi.fn(() => Promise.resolve([])),
 }))
 
 function renderPostPage(id) {
-  const store = configureStore({ reducer: { posts: postsReducer } })
+  const store = configureStore({
+    reducer: { posts: postsReducer, comments: commentsReducer },
+  })
   return render(
     <Provider store={store}>
       <MemoryRouter initialEntries={[`/post/${id}`]}>

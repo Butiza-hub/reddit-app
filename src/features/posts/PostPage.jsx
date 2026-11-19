@@ -3,37 +3,57 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 import { loadPosts } from './postsSlice'
 import { selectPostById } from './selectors'
+import { loadComments } from '../comments/commentsSlice'
+import CommentList from '../comments/CommentList'
 
 export default function PostPage() {
   const { id } = useParams()
   const dispatch = useDispatch()
   const status = useSelector((state) => state.posts.status)
   const post = useSelector((state) => selectPostById(state, id))
+  const comments = useSelector((state) => state.comments)
 
   useEffect(() => {
     dispatch(loadPosts())
   }, [dispatch])
 
+  useEffect(() => {
+    dispatch(loadComments(id))
+  }, [dispatch, id])
+
   function handleTryAgain() {
     dispatch(loadPosts())
+  }
+
+  let commentsSection
+
+  if (comments.status === 'failed') {
+    commentsSection = <p>We couldn&rsquo;t load the comments.</p>
+  } else if (comments.status === 'succeeded') {
+    commentsSection = <CommentList comments={comments.items} />
+  } else {
+    commentsSection = <p>Loading comments...</p>
   }
 
   let content
 
   if (post) {
     content = (
-      <article>
-        <p>
-          <span>{`r/${post.subreddit}`}</span>
-          <span>{`u/${post.author}`}</span>
-        </p>
-        <h1>{post.title}</h1>
-        <p>{post.excerpt}</p>
-        <p>
-          <span>{`${post.score} points`}</span>
-          <span>{`${post.numComments} comments`}</span>
-        </p>
-      </article>
+      <>
+        <article>
+          <p>
+            <span>{`r/${post.subreddit}`}</span>
+            <span>{`u/${post.author}`}</span>
+          </p>
+          <h1>{post.title}</h1>
+          <p>{post.excerpt}</p>
+          <p>
+            <span>{`${post.score} points`}</span>
+            <span>{`${post.numComments} comments`}</span>
+          </p>
+        </article>
+        {commentsSection}
+      </>
     )
   } else if (status === 'failed') {
     content = (

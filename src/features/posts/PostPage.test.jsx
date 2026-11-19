@@ -1,13 +1,22 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import postsReducer from './postsSlice'
+import commentsReducer from '../comments/commentsSlice'
 import PostPage from './PostPage'
+import { fetchComments } from '../../api/redditApi'
+
+vi.mock('../../api/redditApi', async (importOriginal) => {
+  const actual = await importOriginal()
+  return { ...actual, fetchComments: vi.fn(actual.fetchComments) }
+})
 
 function renderPostPage(id) {
-  const store = configureStore({ reducer: { posts: postsReducer } })
+  const store = configureStore({
+    reducer: { posts: postsReducer, comments: commentsReducer },
+  })
   return render(
     <Provider store={store}>
       <MemoryRouter initialEntries={[`/post/${id}`]}>
@@ -70,5 +79,34 @@ describe('PostPage', () => {
       'href',
       '/',
     )
+  })
+
+  it('shows the comments for the post, with Markdown rendered', async () => {
+    renderPostPage('p1')
+
+    expect(await screen.findByText('u/techFan')).toBeInTheDocument()
+    expect(screen.getByText('u/laptopUser')).toBeInTheDocument()
+    expect(screen.getByText('huge').tagName).toBe('STRONG')
+  })
+
+  it('says there are no comments yet for a post without any', async () => {
+    renderPostPage('p3')
+
+    expect(await screen.findByText(/no comments yet/i)).toBeInTheDocument()
+  })
+
+  it('says the comments could not be loaded when that request fails', async () => {
+    fetchComments.mockRejectedValueOnce(new Error('Network down'))
+    renderPostPage('p1')
+
+    expect(
+      await screen.findByText(/couldn.t load the comments/i),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', {
+        level: 1,
+        name: /new chip design promises/i,
+      }),
+    ).toBeInTheDocument()
   })
 })
