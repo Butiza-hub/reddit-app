@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { formatTimeAgo } from '../../utils/formatTimeAgo'
 
 export default function PostCard({ post }) {
@@ -10,7 +11,9 @@ export default function PostCard({ post }) {
         <span>u/{post.author}</span>
         <time dateTime={postedAt}>{formatTimeAgo(post.createdUtc)}</time>
       </p>
-      <h2>{post.title}</h2>
+      <h2>
+        <Link to={`/post/${post.id}`}>{post.title}</Link>
+      </h2>
       <p>{post.excerpt}</p>
       <p>
         <span>{`${post.score} points`}</span>

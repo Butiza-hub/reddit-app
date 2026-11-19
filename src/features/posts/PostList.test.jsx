@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
+import { MemoryRouter } from 'react-router-dom'
 import postsReducer from './postsSlice'
 import filtersReducer, {
   setCategory,
@@ -24,7 +25,9 @@ function renderWithStore(...actions) {
 
   return render(
     <Provider store={store}>
-      <PostList />
+      <MemoryRouter>
+        <PostList />
+      </MemoryRouter>
     </Provider>,
   )
 }
