@@ -1,3 +1,6 @@
+@import "@fontsource/comic-neue/400.css";
+@import "@fontsource/comic-neue/700.css";
+
 :root {
   --color-bg: #23272e;
   --color-surface: #2d323a;
@@ -13,7 +16,8 @@
   --color-accent: #ff4500;
   --color-error: #f87171;
   --color-header: #111827;
-  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-body: "Comic Neue", system-ui, -apple-system, "Segoe UI", Roboto,
+    sans-serif;
   --radius: 6px;
   --content-width: 48rem;
   --gutter: calc(max(0px, (100% - var(--content-width)) / 2) + 1rem);
