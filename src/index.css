@@ -1,20 +1,23 @@
 :root {
-  --color-bg: #f3f5f9;
-  --color-surface: #ffffff;
-  --color-text: #111827;
-  --color-muted: #4b5563;
-  --color-line: #e2e6ee;
-  --color-control: #6b7280;
+  --color-bg: #23272e;
+  --color-surface: #2d323a;
+  --color-text: #ffffff;
+  --color-muted: #b4bcc8;
+  --color-line: #3b424c;
+  --color-control: #8a94a3;
   --color-primary: #0069bd;
   --color-primary-dark: #00528f;
+  --color-link: #7db9f5;
+  --color-link-hover: #a9d2fa;
+  --color-focus: #7db9f5;
   --color-accent: #ff4500;
-  --color-error: #b91c1c;
+  --color-error: #f87171;
   --color-header: #111827;
   --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --radius: 6px;
   --content-width: 48rem;
   --gutter: calc(max(0px, (100% - var(--content-width)) / 2) + 1rem);
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 *,
@@ -36,15 +39,15 @@ h2 {
 }
 
 a {
-  color: var(--color-primary);
+  color: var(--color-link);
 }
 
 a:hover {
-  color: var(--color-primary-dark);
+  color: var(--color-link-hover);
 }
 
 :focus-visible {
-  outline: 3px solid var(--color-primary);
+  outline: 3px solid var(--color-focus);
   outline-offset: 2px;
 }
 
@@ -80,7 +83,8 @@ header input {
   border: 1px solid var(--color-control);
   border-radius: var(--radius);
   background: #ffffff;
-  color: var(--color-text);
+  color: #111827;
+  color-scheme: light;
   font: inherit;
 }
 
@@ -117,13 +121,14 @@ button {
 }
 
 [aria-label="Categories"] button:hover {
-  border-color: var(--color-primary);
+  border-color: var(--color-link);
 }
 
 [aria-label="Categories"] button[aria-pressed="true"] {
   border-color: var(--color-primary);
   background: var(--color-primary);
   color: #ffffff;
+  font-weight: 700;
 }
 
 main button:not([aria-pressed]) {
