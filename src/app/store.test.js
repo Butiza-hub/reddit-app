@@ -16,4 +16,12 @@ describe('store', () => {
       category: 'all',
     })
   })
+
+  it('has a comments section that starts idle and empty', () => {
+    expect(store.getState().comments).toEqual({
+      items: [],
+      status: 'idle',
+      error: null,
+    })
+  })
 })
