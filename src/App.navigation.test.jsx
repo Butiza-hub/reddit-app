@@ -58,4 +58,17 @@ describe('App navigation', () => {
     expect(await screen.findByLabelText(/search posts/i)).toBeInTheDocument()
     expect((await screen.findAllByRole('article')).length).toBeGreaterThan(1)
   })
+
+  it('scrolls to the top when a post is opened', async () => {
+    const user = userEvent.setup()
+    renderApp()
+    const link = await screen.findByRole('link', {
+      name: /slow-burn thriller/i,
+    })
+    window.scrollTo.mockClear()
+
+    await user.click(link)
+
+    expect(window.scrollTo).toHaveBeenCalledWith(0, 0)
+  })
 })

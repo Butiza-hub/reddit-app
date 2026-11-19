@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import SearchBox from './components/SearchBox'
 import CategoryBar from './components/CategoryBar'
+import ScrollToTop from './components/ScrollToTop'
 import PostList from './features/posts/PostList'
 import PostPage from './features/posts/PostPage'
 import { setCategory, setSearchTerm } from './features/filters/filtersSlice'
@@ -32,9 +33,12 @@ function Feed() {
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Feed />} />
-      <Route path="/post/:id" element={<PostPage />} />
-    </Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<Feed />} />
+        <Route path="/post/:id" element={<PostPage />} />
+      </Routes>
+    </>
   )
 }
