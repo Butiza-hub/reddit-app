@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { configureStore } from '@reduxjs/toolkit'
-import commentsReducer, { loadComments } from './commentsSlice'
+import commentsReducer, { clearComments, loadComments } from './commentsSlice'
 import { fetchComments } from '../../api/redditApi'
 
 vi.mock('../../api/redditApi', async (importOriginal) => {
@@ -65,5 +65,18 @@ describe('commentsSlice', () => {
 
     expect(store.getState().comments.items).toEqual([])
     await request
+  })
+
+  it('goes back to the starting state when the comments are cleared', async () => {
+    const store = makeStore()
+    await store.dispatch(loadComments('p1'))
+
+    store.dispatch(clearComments())
+
+    expect(store.getState().comments).toEqual({
+      items: [],
+      status: 'idle',
+      error: null,
+    })
   })
 })

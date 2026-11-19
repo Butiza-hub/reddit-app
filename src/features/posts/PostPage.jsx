@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 import { loadPosts } from './postsSlice'
 import { selectPostById } from './selectors'
-import { loadComments } from '../comments/commentsSlice'
+import { clearComments, loadComments } from '../comments/commentsSlice'
 import CommentList from '../comments/CommentList'
 
 export default function PostPage() {
@@ -19,6 +19,10 @@ export default function PostPage() {
 
   useEffect(() => {
     dispatch(loadComments(id))
+
+    return () => {
+      dispatch(clearComments())
+    }
   }, [dispatch, id])
 
   function handleTryAgain() {

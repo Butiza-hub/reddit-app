@@ -6,14 +6,18 @@ export const loadComments = createAsyncThunk(
   (postId) => fetchComments(postId),
 )
 
+const initialState = {
+  items: [],
+  status: 'idle',
+  error: null,
+}
+
 const commentsSlice = createSlice({
   name: 'comments',
-  initialState: {
-    items: [],
-    status: 'idle',
-    error: null,
+  initialState,
+  reducers: {
+    clearComments: () => initialState,
   },
-  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(loadComments.pending, (state) => {
@@ -31,5 +35,7 @@ const commentsSlice = createSlice({
       })
   },
 })
+
+export const { clearComments } = commentsSlice.actions
 
 export default commentsSlice.reducer
