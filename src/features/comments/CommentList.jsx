@@ -3,16 +3,16 @@ import { formatTimeAgo } from '../../utils/formatTimeAgo'
 
 export default function CommentList({ comments }) {
   return (
-    <section>
+    <section className="comments">
       <h2>Comments</h2>
       {comments.length === 0 ? (
-        <p>No comments yet.</p>
+        <p className="status-message">No comments yet.</p>
       ) : (
-        <ul>
+        <ul className="comment-list">
           {comments.map((comment) => (
             <li key={comment.id}>
-              <article>
-                <p>
+              <article className="comment">
+                <p className="post-meta">
                   <span>u/{comment.author}</span>
                   <time
                     dateTime={new Date(comment.createdUtc * 1000).toISOString()}
@@ -20,7 +20,9 @@ export default function CommentList({ comments }) {
                     {formatTimeAgo(comment.createdUtc)}
                   </time>
                 </p>
-                <Markdown>{comment.body}</Markdown>
+                <div className="comment-body">
+                  <Markdown>{comment.body}</Markdown>
+                </div>
               </article>
             </li>
           ))}

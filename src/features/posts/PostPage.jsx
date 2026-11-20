@@ -32,11 +32,13 @@ export default function PostPage() {
   let commentsSection
 
   if (comments.status === 'failed') {
-    commentsSection = <p>We couldn&rsquo;t load the comments.</p>
+    commentsSection = (
+      <p className="status-message">We couldn&rsquo;t load the comments.</p>
+    )
   } else if (comments.status === 'succeeded') {
     commentsSection = <CommentList comments={comments.items} />
   } else {
-    commentsSection = <p>Loading comments...</p>
+    commentsSection = <p className="status-message">Loading comments...</p>
   }
 
   let content
@@ -44,14 +46,14 @@ export default function PostPage() {
   if (post) {
     content = (
       <>
-        <article>
-          <p>
+        <article className="post-detail">
+          <p className="post-meta">
             <span>{`r/${post.subreddit}`}</span>
             <span>{`u/${post.author}`}</span>
           </p>
-          <h1>{post.title}</h1>
-          <p>{post.excerpt}</p>
-          <p>
+          <h1 className="post-detail-title">{post.title}</h1>
+          <p className="post-body">{post.excerpt}</p>
+          <p className="post-stats">
             <span>{`${post.score} points`}</span>
             <span>{`${post.numComments} comments`}</span>
           </p>
@@ -70,14 +72,16 @@ export default function PostPage() {
       </div>
     )
   } else if (status === 'succeeded') {
-    content = <p>Post not found</p>
+    content = <p className="status-message">Post not found</p>
   } else {
-    content = <p>Loading post...</p>
+    content = <p className="status-message">Loading post...</p>
   }
 
   return (
     <main>
-      <Link to="/">Back to feed</Link>
+      <Link to="/" className="back-link">
+        <span aria-hidden="true">←</span> Back to feed
+      </Link>
       {content}
     </main>
   )
