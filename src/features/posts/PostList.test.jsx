@@ -33,10 +33,10 @@ function renderWithStore(...actions) {
 }
 
 describe('PostList', () => {
-  it('shows a loading message before the posts arrive', async () => {
+  it('shows a loading status before the posts arrive', async () => {
     renderWithStore()
 
-    expect(screen.getByText(/loading posts/i)).toBeInTheDocument()
+    expect(screen.getByRole('status')).toHaveTextContent(/loading posts/i)
 
     await screen.findAllByRole('listitem')
   })
@@ -83,30 +83,38 @@ describe('PostList', () => {
   it('says so when no post matches', async () => {
     renderWithStore(setSearchTerm('kubernetes'))
 
-    expect(await screen.findByText(/no posts match/i)).toBeInTheDocument()
+    expect(
+      await screen.findByRole('heading', { name: /no posts found/i }),
+    ).toBeInTheDocument()
+    expect(screen.getByText(/try a different search term/i)).toBeInTheDocument()
     expect(screen.queryByRole('article')).not.toBeInTheDocument()
   })
 
-  it('brings every post back when "Show all posts" is clicked', async () => {
+  it('shows the posts again when "Clear search" is clicked, and keeps the category', async () => {
     const user = userEvent.setup()
     renderWithStore(setCategory('movies'), setSearchTerm('kubernetes'))
 
     await user.click(
-      await screen.findByRole('button', { name: /show all posts/i }),
+      await screen.findByRole('button', { name: /clear search/i }),
     )
 
     const cards = await screen.findAllByRole('article')
     const posts = await fetchPosts()
+    const movies = posts.filter((post) => post.subreddit === 'movies')
 
-    expect(cards).toHaveLength(posts.length)
+    expect(cards).toHaveLength(movies.length)
   })
 
-  it('shows an error with a "Try again" button when loading fails', async () => {
+  it('shows an alert with a "Try again" button when loading fails', async () => {
     fetchPosts.mockRejectedValueOnce(new Error('Network down'))
     renderWithStore()
 
-    expect(await screen.findByText(/something went wrong/i)).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /try again/i })).toBeInTheDocument()
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      /something went wrong/i,
+    )
+    expect(
+      screen.getByRole('button', { name: /try again/i }),
+    ).toBeInTheDocument()
     expect(screen.queryByText(/loading posts/i)).not.toBeInTheDocument()
     expect(screen.queryByRole('article')).not.toBeInTheDocument()
   })

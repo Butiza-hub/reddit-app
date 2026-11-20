@@ -2,8 +2,9 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadPosts } from './postsSlice'
 import { selectVisiblePosts } from './selectors'
-import { setCategory, setSearchTerm } from '../filters/filtersSlice'
+import { setSearchTerm } from '../filters/filtersSlice'
 import PostCard from './PostCard'
+import StatusPanel from '../../components/StatusPanel'
 
 export default function PostList() {
   const dispatch = useDispatch()
@@ -14,9 +15,8 @@ export default function PostList() {
     dispatch(loadPosts())
   }, [dispatch])
 
-  function handleShowAll() {
+  function handleClearSearch() {
     dispatch(setSearchTerm(''))
-    dispatch(setCategory('all'))
   }
 
   function handleTryAgain() {
@@ -25,28 +25,30 @@ export default function PostList() {
 
   if (status === 'failed') {
     return (
-      <div>
-        <h2>Something went wrong</h2>
-        <p>We couldn&rsquo;t load the posts. Please try again.</p>
-        <button type="button" onClick={handleTryAgain}>
-          Try again
-        </button>
-      </div>
+      <StatusPanel
+        icon="error"
+        role="alert"
+        title="Something went wrong"
+        message="We couldn’t load the posts. Please try again."
+        actionLabel="Try again"
+        onAction={handleTryAgain}
+      />
     )
   }
 
   if (status !== 'succeeded') {
-    return <p>Loading posts...</p>
+    return <StatusPanel icon="loading" role="status" title="Loading posts..." />
   }
 
   if (posts.length === 0) {
     return (
-      <div>
-        <p>No posts match your search.</p>
-        <button type="button" onClick={handleShowAll}>
-          Show all posts
-        </button>
-      </div>
+      <StatusPanel
+        icon="search"
+        title="No posts found"
+        message="Try a different search term."
+        actionLabel="Clear search"
+        onAction={handleClearSearch}
+      />
     )
   }
 

@@ -76,15 +76,13 @@ describe('App', () => {
     )
   })
 
-  it('clears the search box when "Show all posts" is clicked', async () => {
+  it('clears the search box when "Clear search" is clicked', async () => {
     const user = userEvent.setup()
     renderApp()
     await screen.findAllByRole('article')
 
     await user.type(screen.getByLabelText(/search posts/i), 'kubernetes')
-    await user.click(
-      await screen.findByRole('button', { name: /show all posts/i }),
-    )
+    await user.click(await screen.findByRole('button', { name: /clear search/i }))
 
     expect(screen.getByLabelText(/search posts/i)).toHaveValue('')
     expect(screen.getAllByRole('article').length).toBeGreaterThan(1)
