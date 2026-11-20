@@ -19,7 +19,7 @@
   --font-body: "Comic Neue", system-ui, -apple-system, "Segoe UI", Roboto,
     sans-serif;
   --radius: 6px;
-  --content-width: 48rem;
+  --content-width: clamp(48rem, 70vw, 100rem);
   --gutter: calc(max(0px, (100% - var(--content-width)) / 2) + 1rem);
   color-scheme: dark;
 }
@@ -102,6 +102,20 @@ main {
   padding: 1rem;
 }
 
+main > ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 30rem), 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+main > article,
+main > section {
+  max-width: 75ch;
+}
+
 button {
   font: inherit;
   cursor: pointer;
@@ -149,9 +163,80 @@ main button:not([aria-pressed]):hover {
   background: var(--color-primary-dark);
 }
 
+.post-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+
+.post-card:hover {
+  border-color: var(--color-link);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  transform: translateY(-2px);
+}
+
+.post-card:has(a:focus-visible) {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.post-meta,
+.post-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.post-title {
+  margin: 0.4rem 0 0.5rem;
+  font-size: 1.3rem;
+}
+
+.post-title a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.post-title a:hover {
+  color: var(--color-link-hover);
+  text-decoration: underline;
+}
+
+.post-title a:focus-visible {
+  outline: none;
+}
+
+.post-title a::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+}
+
+.post-excerpt {
+  margin: 0 0 0.75rem;
+}
+
+.post-stats {
+  margin-top: auto;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
     animation: none !important;
+  }
+
+  .post-card:hover {
+    transform: none;
   }
 }
