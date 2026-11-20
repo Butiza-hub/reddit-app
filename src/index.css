@@ -34,7 +34,7 @@ body {
   margin: 0;
   background: var(--color-bg);
   color: var(--color-text);
-  font: 1rem/1.6 var(--font-body);
+  font: 1.125rem/1.6 var(--font-body);
 }
 
 h1,
