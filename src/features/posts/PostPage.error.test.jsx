@@ -30,10 +30,12 @@ function renderPostPage(id) {
 }
 
 describe('PostPage when loading fails', () => {
-  it('shows an error message with a Try again button', async () => {
+  it('shows an alert with a Try again button', async () => {
     renderPostPage('p1')
 
-    expect(await screen.findByText('Something went wrong')).toBeInTheDocument()
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Something went wrong',
+    )
     expect(
       screen.getByRole('button', { name: 'Try again' }),
     ).toBeInTheDocument()

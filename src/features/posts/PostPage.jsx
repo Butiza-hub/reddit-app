@@ -1,14 +1,16 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { loadPosts } from './postsSlice'
 import { selectPostById } from './selectors'
 import { clearComments, loadComments } from '../comments/commentsSlice'
 import CommentList from '../comments/CommentList'
+import StatusPanel from '../../components/StatusPanel'
 
 export default function PostPage() {
   const { id } = useParams()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const status = useSelector((state) => state.posts.status)
   const post = useSelector((state) => selectPostById(state, id))
   const comments = useSelector((state) => state.comments)
@@ -27,6 +29,10 @@ export default function PostPage() {
 
   function handleTryAgain() {
     dispatch(loadPosts())
+  }
+
+  function handleGoBack() {
+    navigate('/')
   }
 
   let commentsSection
@@ -63,18 +69,29 @@ export default function PostPage() {
     )
   } else if (status === 'failed') {
     content = (
-      <div>
-        <h1>Something went wrong</h1>
-        <p>We couldn&rsquo;t load this post. Please try again.</p>
-        <button type="button" onClick={handleTryAgain}>
-          Try again
-        </button>
-      </div>
+      <StatusPanel
+        icon="error"
+        role="alert"
+        headingLevel={1}
+        title="Something went wrong"
+        message="We couldn’t load this post. Please try again."
+        actionLabel="Try again"
+        onAction={handleTryAgain}
+      />
     )
   } else if (status === 'succeeded') {
-    content = <p className="status-message">Post not found</p>
+    content = (
+      <StatusPanel
+        icon="search"
+        headingLevel={1}
+        title="Post not found"
+        message="The post you’re looking for might have been removed or no longer exists."
+        actionLabel="Go back to feed"
+        onAction={handleGoBack}
+      />
+    )
   } else {
-    content = <p className="status-message">Loading post...</p>
+    content = <StatusPanel icon="loading" role="status" title="Loading post..." />
   }
 
   return (

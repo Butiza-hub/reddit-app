@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
@@ -21,6 +22,7 @@ function renderPostPage(id) {
     <Provider store={store}>
       <MemoryRouter initialEntries={[`/post/${id}`]}>
         <Routes>
+          <Route path="/" element={<p>Feed page</p>} />
           <Route path="/post/:id" element={<PostPage />} />
         </Routes>
       </MemoryRouter>
@@ -50,10 +52,10 @@ describe('PostPage', () => {
     expect(screen.getByText('38 comments')).toBeInTheDocument()
   })
 
-  it('shows a loading message until the posts have arrived', async () => {
+  it('shows a loading status until the posts have arrived', async () => {
     renderPostPage('p1')
 
-    expect(screen.getByText('Loading post...')).toBeInTheDocument()
+    expect(screen.getByRole('status')).toHaveTextContent('Loading post...')
 
     await screen.findByRole('heading', { level: 1 })
   })
@@ -61,8 +63,24 @@ describe('PostPage', () => {
   it('says the post was not found when the id does not exist', async () => {
     renderPostPage('nope')
 
-    expect(await screen.findByText('Post not found')).toBeInTheDocument()
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Post not found' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(/might have been removed or no longer exists/i),
+    ).toBeInTheDocument()
     expect(screen.queryByText('Loading post...')).not.toBeInTheDocument()
+  })
+
+  it('goes to the feed when "Go back to feed" is clicked', async () => {
+    const user = userEvent.setup()
+    renderPostPage('nope')
+
+    await user.click(
+      await screen.findByRole('button', { name: /go back to feed/i }),
+    )
+
+    expect(await screen.findByText('Feed page')).toBeInTheDocument()
   })
 
   it('keeps a back link to the feed while loading and once the post shows', async () => {
