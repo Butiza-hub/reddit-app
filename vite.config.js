@@ -1,21 +1,14 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
+import { configDefaults } from 'vitest/config'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  server: {
-    proxy: {
-      '/reddit': {
-        target: 'https://www.reddit.com',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/reddit/, ''),
-      },
-    },
-  },
   test: {
     environment: 'jsdom',
     globals: true,
     setupFiles: './src/setupTests.js',
+    exclude: [...configDefaults.exclude, 'e2e/**'],
   },
 })
