@@ -332,6 +332,57 @@ main button:not([aria-pressed]):hover {
   }
 }
 
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+main,
+.status-panel {
+  animation: fade-in 0.25s ease-out;
+}
+
+.post-card {
+  animation: rise-in 0.35s ease-out backwards;
+}
+
+main > ul > li:nth-child(2) .post-card {
+  animation-delay: 0.05s;
+}
+
+main > ul > li:nth-child(3) .post-card {
+  animation-delay: 0.1s;
+}
+
+main > ul > li:nth-child(4) .post-card {
+  animation-delay: 0.15s;
+}
+
+main > ul > li:nth-child(5) .post-card {
+  animation-delay: 0.2s;
+}
+
+main > ul > li:nth-child(n + 6) .post-card {
+  animation-delay: 0.25s;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
