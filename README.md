@@ -29,6 +29,14 @@ Wireframes
 
 I drew the wireframes before building. The first sheet covers the core screens and states, the second adds the design system and animation notes, and the third refines the layout and sketches a "Load more" idea.
 
+![Wireframes, first draft: feed, category, loading, error, no results, post detail, not found, desktop](docs/wireframes/wireframes-v1.png)
+
+![Wireframes, second pass: screens, colour palette, typeface, button states, animation notes](docs/wireframes/wireframes-v2.png)
+
+![Wireframes, third pass: feed layout, states and a "Load more" screen](docs/wireframes/wireframes-v3.png)
+
+The build follows these closely. Where it differs: a post opens on its own page instead of in a side panel next to the feed.
+
 Wireframes, first draft: feed, category, loading, error, no results, post detail, not found, desktop
 
 Wireframes, second pass: screens, colour palette, typeface, button states, animation notes
